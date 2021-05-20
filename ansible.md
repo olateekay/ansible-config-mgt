@@ -58,3 +58,55 @@ I.) Test your setup by making some change in README.MD file in master branch and
 ![alt text](image4.jpg)
 
 Note: Trigger Jenkins project execution only for /main (master) branch.
+
+![alt text](image6b.jpg)
+
+## Step 2 - Begin Ansible Development
+
+1.) In your ansible-config-mgt GitHub repository, create a new branch that will be used for development of a new feature.
+
+
+2.) Checkout the newly created feature branch to your local machine and start building your code and directory structure
+
+3.) Create a directory and name it playbooks - it will be used to store all your playbook files.
+
+4.) Create a directory and name it inventory - it will be used to keep your hosts organised.
+
+5.) Within the playbooks folder, create your first playbook, and name it common.yml
+
+6.) Within the inventory folder, create an inventory file (.yml) for each environment (Development, Staging Testing and Production) dev, staging, uat, and prod respectively.
+
+
+## Step 4 - Set up an Ansible Inventory
+
+An Ansible inventory file defines the hosts and groups of hosts upon which commands, modules, and tasks in a playbook operate. Since our intention is to execute Linux commands on remote hosts, and ensure that it is the intended configuration on a particular server that occurs. It is important to have a way to organize our hosts in such an Inventory.
+
+Save below inventory structure in the `inventory/dev` file to start configuring your development servers. Ensure to replace the IP addresses according to your own setup.
+
+Note: Ansible uses TCP port 22 by default, which means it needs to ssh into target servers from Jenkins-Ansible host - for this you need to copy your private (.pem) key to your server. Do not forget to change permissions to your private key chmod 400 key.pem, otherwise EC2 will not accept the key. Now you need to import your key into ssh-agent:
+
+```
+eval `ssh-agent -s`
+ssh-add <path-to-private-key>
+
+```
+
+Also notice, that your Load Balancer user is `ubuntu` and user for RHEL-based servers is `ec2-user`.
+
+1.) Update your `inventory/dev.yml` file with this snippet of code:
+
+```
+[nfs]
+<NFS-Server-Private-IP-Address> ansible_ssh_user='ec2-user'
+
+[webservers]
+<Web-Server1-Private-IP-Address> ansible_ssh_user='ec2-user'
+<Web-Server2-Private-IP-Address> ansible_ssh_user='ec2-user'
+
+[db]
+<Database-Private-IP-Address> ansible_ssh_user='ec2-user' 
+
+[lb]
+<Load-Balancer-Private-IP-Address> ansible_ssh_user='ubuntu'
+
+```
