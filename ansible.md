@@ -148,6 +148,6 @@ Examine the code above and try to make sense out of it. This playbook is divided
 
 Feel free to update this playbook with following tasks:
 
-Create a directory and a file inside it
-Change timezone on all servers
-Run some shell script
+- Create a directory and a file inside it
+- Change timezone on all servers
+- Run some shell script
