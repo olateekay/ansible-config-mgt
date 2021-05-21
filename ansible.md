@@ -241,4 +241,31 @@ PLAY RECAP *********************************************************************
 
 You can go to each of the servers and check if wireshark has been installed by running which wireshark or wireshark --version
 
-![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image10.JPG)
+ubuntu@ip-172-31-5-122:~$ wireshark --version
+Wireshark 3.2.3 (Git v3.2.3 packaged as 3.2.3-1)
+
+Copyright 1998-2020 Gerald Combs <gerald@wireshark.org> and contributors.
+License GPLv2+: GNU GPL version 2 or later <https://www.gnu.org/licenses/gpl-2.0.html>
+This is free software; see the source for copying conditions. There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Compiled (64-bit) with Qt 5.12.8, with libpcap, with POSIX capabilities (Linux),
+with libnl 3, with GLib 2.64.2, with zlib 1.2.11, with SMI 0.4.8, with c-ares
+1.15.0, with Lua 5.2.4, with GnuTLS 3.6.13 and PKCS #11 support, with Gcrypt
+1.8.5, with MIT Kerberos, with MaxMind DB resolver, with nghttp2 1.40.0, with
+brotli, with LZ4, with Zstandard, with Snappy, with libxml2 2.9.10, with
+QtMultimedia, without automatic updates, with SpeexDSP (using system library),
+with SBC, with SpanDSP, without bcg729.
+
+Running on Linux 5.4.0-1047-aws, with Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
+(with SSE4.2), with 978 MB of physical memory, with locale C.UTF-8, with libpcap
+version 1.9.1 (with TPACKET_V3), with GnuTLS 3.6.13, with Gcrypt 1.8.5, with
+brotli 1.0.7, with zlib 1.2.11, binary plugins supported (0 loaded).
+
+Built using gcc 9.3.0.
+ubuntu@ip-172-31-5-122:~$ client_loop: send disconnect: Connection reset by peer
+
+Olatokunbo.Ogunlade@VGG-LT-338 MINGW64 ~
+```
+
+```
