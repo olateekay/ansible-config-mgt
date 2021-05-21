@@ -47,6 +47,7 @@ f.) Create a new Freestyle project ansible in Jenkins and point it to your ‘an
 g.) Configure Webhook in GitHub and set webhook to trigger ansible build.
 
 h.) Configure a Post-build job to save all (**) files
+
 I.) Test your setup by making some change in README.MD file in master branch and make sure that builds starts automatically and Jenkins saves the files (build artifacts) in following folder
 
 `ls /var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/`
@@ -76,7 +77,9 @@ Note: Trigger Jenkins project execution only for /main (master) branch.
 
 6.) Within the inventory folder, create an inventory file (.yml) for each environment (Development, Staging Testing and Production) dev, staging, uat, and prod respectively.
 
+![alt text](image6.jpg)
 
+![alt text](image6b.jpg)
 ## Step 4 - Set up an Ansible Inventory
 
 An Ansible inventory file defines the hosts and groups of hosts upon which commands, modules, and tasks in a playbook operate. Since our intention is to execute Linux commands on remote hosts, and ensure that it is the intended configuration on a particular server that occurs. It is important to have a way to organize our hosts in such an Inventory.
@@ -181,6 +184,8 @@ Wear a hat of another developer for a second, and act as a reviewer.
 If the reviewer is happy with your new feature development, merge the code to the master branch.
 Head back on your terminal, checkout from the feature branch into the master, and pull down the latest changes.
 Once your code changes appear in master branch - Jenkins will do its job and save all the files (build artifacts) to `/var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/` directory on Jenkins-Ansible server.
+
+![alt text](image9.jpg)
 
 
 Now, it is time to execute ansible-playbook command and verify if your playbook actually works:
