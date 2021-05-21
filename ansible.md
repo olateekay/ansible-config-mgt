@@ -3,7 +3,7 @@
 A Jump Server (sometimes also referred as Bastion Host) is an intermediary server through which access to internal network can be provided. If you think about the current architecture you are working on, ideally, the webservers would be inside a secured network which cannot be reached directly from the Internet.
 
 
-![alt text](image1.jpg)
+![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image1.JPG)
 
 ## Task
 1. Install and configure Ansible client to act as a Jump Server/Bastion Host
@@ -52,15 +52,15 @@ I.) Test your setup by making some change in README.MD file in master branch and
 
 `ls /var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/`
 
-![alt text](image2.jpg)
+![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image2.JPG)
 
-![alt text](image3.jpg)
+![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image3.JPG)
 
-![alt text](image4.jpg)
+![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image4.JPG)
 
 Note: Trigger Jenkins project execution only for /main (master) branch.
 
-![alt text](image6b.jpg)
+![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image6b.JPG)
 
 ## Step 2 - Begin Ansible Development
 
@@ -77,9 +77,9 @@ Note: Trigger Jenkins project execution only for /main (master) branch.
 
 6.) Within the inventory folder, create an inventory file (.yml) for each environment (Development, Staging Testing and Production) dev, staging, uat, and prod respectively.
 
-![alt text](image6.jpg)
+![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image6.JPG)
 
-![alt text](image6b.jpg)
+
 ## Step 4 - Set up an Ansible Inventory
 
 An Ansible inventory file defines the hosts and groups of hosts upon which commands, modules, and tasks in a playbook operate. Since our intention is to execute Linux commands on remote hosts, and ensure that it is the intended configuration on a particular server that occurs. It is important to have a way to organize our hosts in such an Inventory.
@@ -106,7 +106,7 @@ Identity added: keys (keys)
 
 Also notice, that your Load Balancer user is `ubuntu` and user for RHEL-based servers is `ec2-user`.
 
-1.) Update your `inventory/dev.yml` file with this snippet of code:
+1.) Update your `inventory/dev` file with this snippet of code:
 
 ```
 [nfs]
@@ -185,7 +185,7 @@ If the reviewer is happy with your new feature development, merge the code to th
 Head back on your terminal, checkout from the feature branch into the master, and pull down the latest changes.
 Once your code changes appear in master branch - Jenkins will do its job and save all the files (build artifacts) to `/var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/` directory on Jenkins-Ansible server.
 
-![alt text](image9.jpg)
+![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image9.JPG)
 
 
 Now, it is time to execute ansible-playbook command and verify if your playbook actually works:
@@ -241,4 +241,4 @@ PLAY RECAP *********************************************************************
 
 You can go to each of the servers and check if wireshark has been installed by running which wireshark or wireshark --version
 
-![alt text](image10.jpg)
+![alt text](https://github.com/olateekay/ansible-config-mgt/blob/main/images/image10.JPG)
