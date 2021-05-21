@@ -85,11 +85,21 @@ Save below inventory structure in the `inventory/dev` file to start configuring 
 
 Note: Ansible uses TCP port 22 by default, which means it needs to ssh into target servers from Jenkins-Ansible host - for this you need to copy your private (.pem) key to your server. Do not forget to change permissions to your private key chmod 400 key.pem, otherwise EC2 will not accept the key. Now you need to import your key into ssh-agent:
 
-```
-eval `ssh-agent -s`
-ssh-add <path-to-private-key>
+There are several ways to achieve this, we can take this route;
+
+a.) Copy the content of your `.pem` file with which you `ssh` into your Ansible control node
+a.) In the root folder of your Ansible control node, navigate to the `.ssh` directory and create a file, paste the content of your `.pem` file into the newly created file
+c.) Give the file permissions `chmod 400 <file name>`
+follow this example, the content of the `.pem` file was copied into a file named keys
 
 ```
+ubuntu@ip-172-31-44-66:~$ cd .ssh
+ubuntu@ip-172-31-44-66:~/.ssh$ ssh-agent bash
+ubuntu@ip-172-31-44-66:~/.ssh$ ssh-add keys
+Identity added: keys (keys)
+
+```
+
 
 Also notice, that your Load Balancer user is `ubuntu` and user for RHEL-based servers is `ec2-user`.
 
@@ -104,7 +114,7 @@ Also notice, that your Load Balancer user is `ubuntu` and user for RHEL-based se
 <Web-Server2-Private-IP-Address> ansible_ssh_user='ec2-user'
 
 [db]
-<Database-Private-IP-Address> ansible_ssh_user='ec2-user' 
+<Database-Private-IP-Address> ansible_ssh_user='ubuntu' 
 
 [lb]
 <Load-Balancer-Private-IP-Address> ansible_ssh_user='ubuntu'
@@ -146,8 +156,84 @@ Update your `playbooks/common.yml` file with following code:
 
 Examine the code above and try to make sense out of it. This playbook is divided into two parts, each of them is intended to perform the same task: install wireshark utility (or make sure it is updated to the latest version) on your RHEL 8 and Ubuntu servers. It uses root user to perform this task and respective package manager: yum for RHEL 8 and apt for Ubuntu.
 
-Feel free to update this playbook with following tasks:
+## Step 5 - Update GIT with the latest code
+Now all of your directories and files live on your machine and you need to push changes made locally to GitHub.
 
-- Create a directory and a file inside it
-- Change timezone on all servers
-- Run some shell script
+In the real world, you will be working within a team of other DevOps engineers and developers. It is important to learn how to collaborate with help of GIT. In many organisations there is a development rule that do not allow to deploy any code before it has been reviewed by an extra pair of eyes - it is also called “Four eyes principle”.
+
+Now you have a separate branch, you will need to know how to raise a Pull Request (PR), get your branch peer reviewed and merged to the master branch.
+
+Commit your code into GitHub:
+
+use git commands to add, commit and push your branch to GitHub.
+
+```
+git status
+
+git add <selected files>
+
+git commit -m "commit message"
+
+```
+
+Create a Pull request (PR)
+Wear a hat of another developer for a second, and act as a reviewer.
+If the reviewer is happy with your new feature development, merge the code to the master branch.
+Head back on your terminal, checkout from the feature branch into the master, and pull down the latest changes.
+Once your code changes appear in master branch - Jenkins will do its job and save all the files (build artifacts) to `/var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/` directory on Jenkins-Ansible server.
+
+
+Now, it is time to execute ansible-playbook command and verify if your playbook actually works:
+
+```
+ansible-playbook -i /var/lib/jenkins/jobs/ansible/builds/<build-number>/archive/inventory/dev /var/lib/jenkins/jobs/ansible/builds/<build-number>/archive/playbooks/common.yml 
+
+```
+
+output
+
+```
+ubuntu@ip-172-31-44-66:~$ ansible-playbook -i /var/lib/jenkins/jobs/ansible/builds/10/archive/inventory/dev /var/lib/jenkins/jobs/ansible/builds/10/archive/playbooks/common.yml
+
+PLAY [update web, nfs and db servers] *****************************************************************************************************
+TASK [Gathering Facts] ********************************************************************************************************************ok: [172.31.13.254]
+ok: [172.31.11.45]
+ok: [172.31.5.122]
+ok: [172.31.15.118]
+
+TASK [ensure wireshark is at the latest version] ******************************************************************************************ok: [172.31.13.254]
+ok: [172.31.11.45]
+ok: [172.31.15.118]
+changed: [172.31.5.122]
+
+PLAY [update LB server] *******************************************************************************************************************
+TASK [Gathering Facts] ********************************************************************************************************************
+
+PLAY [update web, nfs and db servers] *****************************************************************************************************
+TASK [Gathering Facts] ********************************************************************************************************************ok: [172.31.15.118]
+ok: [172.31.11.45]
+ok: [172.31.13.254]
+ok: [172.31.5.122]
+
+TASK [ensure wireshark is at the latest version] ******************************************************************************************ok: [172.31.5.122]
+ok: [172.31.13.254]
+ok: [172.31.11.45]
+ok: [172.31.15.118]
+
+PLAY [update LB server] ******************************************************************************************************************************************************
+TASK [Gathering Facts] *******************************************************************************************************************************************************ok: [172.31.40.150]
+
+TASK [ensure wireshark is at the latest version] ******************************************************************************************ok: [172.31.40.150]
+
+PLAY RECAP ********************************************************************************************************************************172.31.11.45               : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+172.31.13.254              : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0
+ ignored=0
+172.31.15.118              : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0
+
+
+
+```
+
+You can go to each of the servers and check if wireshark has been installed by running which wireshark or wireshark --version
+
+![alt text](image10.jpg)
